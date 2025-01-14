@@ -1,87 +1,104 @@
-import React, { Fragment, useState } from "react";
-import '../CSS/TodoList.css'
-
-
+import React, { useContext, useEffect, useState } from "react";
+import { ThemeContext } from "../Contexts/ThemeContext.jsx";
+import "../CSS/TodoList.css";
 
 function Todolist() {
     const [newItem, setNewItem] = useState("");
     const [todos, setTodos] = useState([]);
+
+    const { theme, choisirTheme } = useContext(ThemeContext); // Utilisation du contexte
     const existe_tache = todos.some(todo => todo.title.toLowerCase() === newItem.toLowerCase());
 
+    // Charger les tâches depuis localStorage au démarrage
+    useEffect(() => {
+        const savedTodos = JSON.parse(localStorage.getItem("todos"));
+        if (savedTodos) {
+            setTodos(savedTodos);
+        }
+    }, []);
 
-    //ajout d'une tache dans la liste
+    // Sauvegarder les tâches dans localStorage chaque fois qu'elles sont modifiées
+    useEffect(() => {
+        if (todos.length > 0) {
+            localStorage.setItem("todos", JSON.stringify(todos));
+        }
+    }, [todos]);
+
+
+    // Ajouter une tâche
     function handleSubmit(e) {
         e.preventDefault();
 
-        //si la tâche est vide
         if (newItem.trim() === "") {
-            alert("La tâche est vide, entrez une tâche valide");
+            alert("La tâche est vide, entrez une tâche valide.");
             return;
         }
 
-        //si la tâche existe_tache deja
         if (existe_tache) {
-            alert("Cette tâche existe deja.");
+            alert("Cette tâche existe déjà.");
             return;
         }
-
-
 
         setTodos(currentTodos => [
             ...currentTodos,
             {
                 id: crypto.randomUUID(),
                 title: newItem,
-                completed: false
+                completed: false,
             },
         ]);
-        // Réinitialise l'input après l'ajout
         setNewItem("");
     }
 
+    // Supprimer une tâche
     function DeleteTache(id) {
         setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
     }
 
+    // Cocher/Décocher une tâche
     function handleCocher(id) {
         setTodos(currentTodos =>
-            currentTodos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            currentTodos.map(todo =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
             )
         );
     }
 
+    useEffect(() => {
+        if(todos.every(todo => todo.completed)){
+            alert("Bien joué ! Toutes les tâches sont complétées")
+        }
+    }, [todos]);
+
     return (
-        <>
+        <div className={`todolist-container ${theme}`}>
+            <button onClick={choisirTheme} className="theme-toggle">
+                Changer le thème ({theme === "clair" ? "Sombre" : "Clair"})
+            </button>
+
             <form onSubmit={handleSubmit} className="new-item-form">
                 <div className="form">
-                    <h1>Todo List</h1>
-                    <label htmlFor="item"> Nouvelle tâche </label><br/>
-                    <input
-                        value={newItem}
-                        onChange={e => setNewItem(e.target.value)}
-                        type="text"
-                        id="item"
-                    /><br/><br/>
-                    <button className="button-ajout">Add</button>
+                    <h1 className={`title ${theme}`}>Todo List</h1>
+                    <label htmlFor="item">Nouvelle tâche</label>
+                    <input value={newItem} onChange={e => setNewItem(e.target.value)} type="text" id="item"/>
+                    <button className="button-ajout">Ajouter</button>
                 </div>
             </form>
-
 
             <ul className="list">
                 {todos.map(todo => (
                     <li key={todo.id}>
                         <label>
-                            <input onChange={() => handleCocher(todo.id)} type="checkbox" checked={todo.completed} />
+                            <input onChange={() => handleCocher(todo.id)} type="checkbox" checked={todo.completed}
+                            />
                             {todo.title}
                         </label>
-
-
-                        <button onClick={() => DeleteTache(todo.id)} className="btn btn-danger">Delete</button>
-
+                        <button onClick={() => DeleteTache(todo.id)} className="button-delete">Supprimer
+                        </button>
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     );
 }
 
