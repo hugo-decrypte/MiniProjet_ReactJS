@@ -1,0 +1,4 @@
+Les Hooks en React permettent d'utiliser des fonctionnalités comme l'état (state)
+et les cycles de vie (comme componentDidMount) dans les composants fonctionnels.
+
+ Avant, il fallait forcément des classes pour faire ça.

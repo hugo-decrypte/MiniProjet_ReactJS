@@ -1,0 +1,48 @@
+useState : Gère l'état dans un composant.
+
+//Exemple
+import { useState } from "react";
+
+function Counter() {
+
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Compteur : {count}</p>
+      <button onClick={() => setCount(count + 1)}>+1</button>
+    </div>
+  );
+}
+
+
+useEffect : Exécute du code après un rendu (exemple : fetch des données ou mise à jour d'un titre).
+
+import { useEffect } from "react";
+
+function App() {
+  useEffect(() => {
+    console.log("Le composant est monté !");
+  }, []); // [] = une seule fois, au début
+
+  return <div>Mon App</div>;
+}
+
+
+
+useContext : Accède directement à un contexte .
+
+import { useContext } from "react";
+const ThemeContext = React.createContext("light");
+
+function Button() {
+  const theme = useContext(ThemeContext);
+
+  return <button className={theme}>Bouton</button>;
+}
+
+
+en somme :
+useState = Gère un état
+useEffect = Exécute du code après un rendu
+useContext = Partage des infos sans passer par les props

@@ -1,0 +1,9 @@
+un composant c'est trois chose :
+
+    - Un état (état, données)
+
+    - un ou des comportements
+
+    un affichage (render)
+
+Les composants sont la plupart du temps fonctionels (function Nom_avec_une_majuscule(parametres)

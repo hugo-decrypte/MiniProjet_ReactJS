@@ -1,23 +1,27 @@
-import './App.css'
-import {Fragment} from "react";
+import React, { useState } from 'react';
+import Profile from './assets/Composants/Profile.jsx';
+import Todolist from './assets/Composants/Todolist.jsx';
+import './assets/CSS/App.css';
+
 
 function App() {
+    const [activeTab, setActiveTab] = useState('profile'); // Onglet actif
 
+    return (
+        <div className="App">
+            {/* Menu de navigation */}
+            <nav className="navbar">
+                <button onClick={() => setActiveTab('profile')}>Profil</button>
+                <button onClick={() => setActiveTab('todolist')}>To-Do List</button>
+            </nav>
 
-    const handleClick = () => {
-        alert("j'ai cliqué sur le titre")
-    }
-
-    return <Fragment>
-        <h1 onClick={handleClick} id="title" className="title">Bonjour tout le monde</h1>
-        <input type="text"/><br/><br/>
-        <button className="button">bonjour</button>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-            ipsum dolor sit amet.
-        </p>
-    </Fragment>
+            {/* Contenu dynamique basé sur l'onglet actif */}
+            <div className="content">
+                {activeTab === 'profile' && <Profile />}
+                {activeTab === 'todolist' && <Todolist />}
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
