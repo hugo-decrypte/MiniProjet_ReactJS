@@ -21,6 +21,8 @@ function Todolist() {
     useEffect(() => {
         if (todos.length > 0) {
             localStorage.setItem("todos", JSON.stringify(todos));
+        } else {
+            localStorage.removeItem("todos");
         }
     }, [todos]);
 
@@ -63,12 +65,6 @@ function Todolist() {
             )
         );
     }
-
-    useEffect(() => {
-        if(todos.every(todo => todo.completed)){
-            alert("Bien joué ! Toutes les tâches sont complétées")
-        }
-    }, [todos]);
 
     return (
         <div className={`todolist-container ${theme}`}>
